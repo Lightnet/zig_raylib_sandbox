@@ -83,6 +83,52 @@ pub fn build(b: *std.Build) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
+    //APP_2D
+    const exe_2d = b.addExecutable(.{
+        .name = "raylib_app2d",
+        .root_source_file = b.path("src/app_2d.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    exe_2d.addIncludePath(raygui_dep.path("src"));
+    exe_2d.addCSourceFiles(.{ // for loading raygui.h file raygui_impl.c
+        .files = &[_][]const u8{"src/c/raygui_impl.c"},
+        .flags = &[_][]const u8{ "-g", "-O3" },
+    });
+    exe_2d.linkLibrary(raylib_dep);
+    b.installArtifact(exe_2d);
+
+    const run_2d_cmd = b.addRunArtifact(exe_2d);
+    run_2d_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| {
+        run_2d_cmd.addArgs(args);
+    }
+    const run_2d_step = b.step("2d", "Run the app");
+    run_2d_step.dependOn(&run_2d_cmd.step);
+
+    //APP_3D
+    const exe_3d = b.addExecutable(.{
+        .name = "raylib_app3d",
+        .root_source_file = b.path("src/app_3d.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    exe_3d.addIncludePath(raygui_dep.path("src"));
+    exe_3d.addCSourceFiles(.{ // for loading raygui.h file raygui_impl.c
+        .files = &[_][]const u8{"src/c/raygui_impl.c"},
+        .flags = &[_][]const u8{ "-g", "-O3" },
+    });
+    exe_3d.linkLibrary(raylib_dep);
+    b.installArtifact(exe_3d);
+
+    const run_3d_cmd = b.addRunArtifact(exe_3d);
+    run_3d_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| {
+        run_3d_cmd.addArgs(args);
+    }
+    const run_3d_step = b.step("3d", "Run the app");
+    run_3d_step.dependOn(&run_3d_cmd.step);
+
     // //TEST
     // const lib_unit_tests = b.addTest(.{
     //     .root_source_file = b.path("src/root.zig"),

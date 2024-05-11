@@ -14,7 +14,7 @@ pub fn main() !void {
     const game_app = game.App.init();
 
     r.InitWindow(960, 540, "My Window Name");
-    r.SetTargetFPS(144);
+    r.SetTargetFPS(60);
     defer r.CloseWindow();
 
     game_app.load();
@@ -26,7 +26,8 @@ pub fn main() !void {
 
     while (!r.WindowShouldClose()) {
         r.BeginDrawing();
-        r.ClearBackground(r.BLACK);
+        //r.ClearBackground(r.BLACK);
+        r.ClearBackground(r.RAYWHITE);
 
         _ = r.GuiCheckBox(rec_checkbox, "FORCE CHECK!", &checked);
         _ = r.GuiButton(r.Rectangle{ .x = 20, .y = 40, .height = 16, .width = 100 }, "Click!");
