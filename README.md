@@ -32,8 +32,27 @@
 
  Note his idea base on Wicked Engine way to save assets to create prefab entity. Just like Godot Engine format.
 
+ Need to build module stuff for libs to access and toggle enable features.
 
+## Features (idea):
+ - lua
+ - entity
+ - component
+ - system
+ - binary for load game content faster.
+ - config
+ - API
 
+# Project layout:
+```
+ - src
+ -- app_2d.zig // test 2D
+ -- app_3d.zig // test 3D
+ -- main.zig // main
+ -- window_editor.zig // UI Editor Test
+ -- root.zig // lib
+
+```
 # raylib:
 ```zig
 const r = @cImport({
