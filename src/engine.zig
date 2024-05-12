@@ -1,4 +1,4 @@
-//prototype
+// game engine
 const std = @import("std");
 const r = @cImport({
     @cInclude("raylib.h");
