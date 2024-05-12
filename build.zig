@@ -129,6 +129,29 @@ pub fn build(b: *std.Build) void {
     const run_3d_step = b.step("3d", "Run the app");
     run_3d_step.dependOn(&run_3d_cmd.step);
 
+    //Window_Editor
+    const exe_window_editor = b.addExecutable(.{
+        .name = "raylib_editor",
+        .root_source_file = b.path("src/window_editor.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+    exe_window_editor.addIncludePath(raygui_dep.path("src"));
+    exe_window_editor.addCSourceFiles(.{ // for loading raygui.h file raygui_impl.c
+        .files = &[_][]const u8{"src/c/raygui_impl.c"},
+        .flags = &[_][]const u8{ "-g", "-O3" },
+    });
+    exe_window_editor.linkLibrary(raylib_dep);
+    b.installArtifact(exe_window_editor);
+
+    const run_window_editor_cmd = b.addRunArtifact(exe_window_editor);
+    run_window_editor_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| {
+        run_window_editor_cmd.addArgs(args);
+    }
+    const run_window_editor_step = b.step("editor", "Run the app");
+    run_window_editor_step.dependOn(&run_window_editor_cmd.step);
+
     // //TEST
     // const lib_unit_tests = b.addTest(.{
     //     .root_source_file = b.path("src/root.zig"),
